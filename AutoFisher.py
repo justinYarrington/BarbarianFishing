@@ -8,6 +8,7 @@ from itertools import chain
 import os
 
 def createDropList(path):
+    """Using path, will return an array of all items that a player wishes to drop from their inventory"""
     images = []
     for image in os.listdir(path):
         images.append(os.path.join(path, image))
@@ -15,6 +16,7 @@ def createDropList(path):
     return images
 
 def dropItem(item):
+    """Drop's specified item. This will take a Box(Top, Left, Width, Height) generator"""
     r = randint(28, 32)
     t = uniform(4.8, 7)
     clicktime = t/r
@@ -28,6 +30,7 @@ def dropItem(item):
     return
 
 def clickSpecial(item):
+    """Will use special if image is provided"""
     if item is None:
         print('inif')
         return False
@@ -41,6 +44,7 @@ def clickSpecial(item):
     return True
 
 def startFishing(item):
+    """Starts fishing given an image of the fishing location"""
     if item is None:
         print('inif')
         return False
@@ -72,10 +76,6 @@ def random_coordinate(center, item):
 def random_wait(min=0.25, max=0.50):
         """Waits a random number of seconds between two numbers (0.25 and 0.50 default) to mimic human reaction time"""
         return time.sleep(uniform(min, max))
-
-def click_rod():
-    rod = pag.locateOnScreen('images\\heavyRod.png', confidence=0.95)
-    pag.click(rod)
 
 # 2333, 1097 : 2512, 1352
 if __name__ == '__main__':
