@@ -5,6 +5,14 @@ import time
 import numpy as np
 import pyautogui as pag
 from itertools import chain
+import os
+
+def createDropList(path):
+    images = []
+    for image in os.listdir(path):
+        images.append(os.path.join(path, image))
+    print(images)
+    return images
 
 def dropItem(item):
     r = randint(28, 32)
@@ -55,8 +63,8 @@ def travel_time(x2, y2):
 
 def random_coordinate(center, item):
         """Moves cursor to random locaction still above the object to be clicked"""
-        x = randint(center[0], center[0]+int(item[2]/6))
-        y = randint(center[1], center[1]+int(item[3]/6))
+        x = randint(center[0], center[0]+int(item[2]/4))
+        y = randint(center[1], center[1]+int(item[3]/4))
         time = travel_time(x, y)
         print('X:%s,Y:%s' % (x,y))
         return pag.moveTo(x, y, time)
@@ -72,6 +80,7 @@ def click_rod():
 # 2333, 1097 : 2512, 1352
 if __name__ == '__main__':
     conf = 0.75
+    drops = createDropList('DropItems')
     try:
         while True:
             
@@ -83,18 +92,20 @@ if __name__ == '__main__':
                     special = pag.locateOnScreen('images\\specialReady.png', confidence=0.95)
                     clickSpecial(special)
                 #we stopped fishing, drop inventory and restart fishing
-                leapingSturgeons = pag.locateAllOnScreen('images\\leapingSturgeonTest.png', confidence=0.95)
-                leapingSalmons = pag.locateAllOnScreen('images\\leapingSalmonTest.png', confidence=0.95)
-                leapingTrouts = pag.locateAllOnScreen('images\\leapingTroutTest.png', confidence=0.95)
-                toDrop = chain(list(leapingSturgeons),list(leapingSalmons),list(leapingTrouts))
+                
+                inventory = []
+                for image in drops:
+                    matches = pag.locateAllOnScreen(image, confidence=0.95)
+                    for match in matches:
+                        inventory.append(match)
                 
                 # should sort on closest to current cursor, this can be much better 
                 # since image size is factored here
                 #toDropSorted = sorted(toDrop, key=lambda a: (pag.center(a).x,pag.center(a).y))
-                toDropSorted = sorted(toDrop, key=lambda a: (a.top, a.left))
-                print(toDropSorted)
+                inventorySorted = sorted(inventory, key=lambda a: (a.top, a.left))
+                print(inventorySorted)
                 random_wait()
-                for drop in toDropSorted:
+                for drop in inventorySorted:
                     dropItem(drop)
                 try:
                     print(conf)
