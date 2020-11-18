@@ -46,9 +46,8 @@ def clickSpecial(item):
     t = uniform(4.8, 7)
     clicktime = t/r
     random_wait(clicktime - .04, clicktime + .04)
-    myChoice = choice(item)
-    center = pag.center(myChoice)
-    random_coordinate(center, myChoice)
+    center = pag.center(item)
+    random_coordinate(center, item)
     pag.click()
     return True
 
@@ -61,8 +60,9 @@ def startFishing(item):
     t = uniform(4.8, 7)
     clicktime = t/r
     random_wait(clicktime - .04, clicktime + .04)
-    center = pag.center(item)
-    random_coordinate(center, item)
+    myChoice = choice(item)
+    center = pag.center(myChoice)
+    random_coordinate(center, myChoice)
     pag.click()
     time.sleep(5)
     return True
