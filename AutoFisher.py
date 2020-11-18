@@ -1,5 +1,5 @@
 import math
-from random import randint, uniform, choice
+from random import randint, uniform, choice, random
 import sys
 import time
 import numpy as np
@@ -16,20 +16,6 @@ def checkFishingLevel(item):
     random_coordinate(center, item)
     random_wait(2, 4)
     return
-
-def openInventory(item):
-    """TODO: Should open the inventory if not already opened, i.e. after checking xp/level progress"""
-    if not item:
-        print('inif')
-        return False
-    r = randint(28, 32)
-    t = uniform(4.8, 7)
-    clicktime = t/r
-    random_wait(clicktime - .04, clicktime + .04)
-    center = pag.center(item)
-    random_coordinate(center, item)
-    pag.click()
-    return True
 
 def createDropList(path):
     """Using path, will return an array of all items that a player wishes to drop from their inventory"""
@@ -52,7 +38,7 @@ def dropItem(item):
     pag.keyUp('shift')
     return
 
-def clickSpecial(item):
+def clickIcon(item):
     """Will use special if image is provided"""
     if not item:
         print('inif')
@@ -101,17 +87,28 @@ def random_wait(min=0.25, max=0.50):
         """Waits a random number of seconds between two numbers (0.25 and 0.50 default) to mimic human reaction time"""
         return time.sleep(uniform(min, max))
 
+def get_new_time_to_perform_action():
+  delay_minutes = (30 + random() * 30) # 30-60 minutes
+  return time.time() + delay_minutes * 60
+
 # 2333, 1097 : 2512, 1352
 if __name__ == '__main__':
+    next_time_to_run = get_new_time_to_perform_action()
     conf = 0.75
     drops = createDropList('DropItems')
     try:
         while True:
-            
+
+            """Randomly decide to check our fishing experience"""
+            if (time.time() >= next_time_to_run):
+                clickIcon(pag.locateOnScreen('\\images\\clickSkills.png', confidence=0.95))
+                checkFishingLevel(pag.locateOnScreen('\\images\\fishingLevel.png', confidence=0.95))
+                next_time_to_run = get_new_time_to_perform_action()
+
             """Check if in inventory or not, if not open it"""
             if (pag.locateOnScreen('images\\inventoryClosed.png', confidence=0.95)):
                 inventoryImage = pag.locateOnScreen('images\\inventoryClosed.png', confidence=0.95)
-                openInventory(inventoryImage)
+                clickIcon(inventoryImage)
 
             if (pag.locateOnScreen('images\\isFishing.png', confidence=0.95)):
                 pass
@@ -119,7 +116,7 @@ if __name__ == '__main__':
                 print('NOT FISHING')
                 if (pag.locateOnScreen('images\\specialReady.png', confidence=0.95)):
                     special = pag.locateOnScreen('images\\specialReady.png', confidence=0.95)
-                    clickSpecial(special)
+                    clickIcon(special)
                 #we stopped fishing, drop inventory and restart fishing
                 
                 inventory = []
