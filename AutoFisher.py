@@ -1,11 +1,19 @@
 import math
-from random import randint, uniform
+from random import randint, uniform, choice
 import sys
 import time
 import numpy as np
 import pyautogui as pag
 from itertools import chain
 import os
+
+def checkFishingLevel(path):
+    """TODO: Mimic behavior of checking progress of fishing level"""
+    return
+
+def openInventory(path):
+    """TODO: Should open the inventory if not already opened, i.e. after checking xp/level progress"""
+    return
 
 def createDropList(path):
     """Using path, will return an array of all items that a player wishes to drop from their inventory"""
@@ -31,15 +39,16 @@ def dropItem(item):
 
 def clickSpecial(item):
     """Will use special if image is provided"""
-    if item is None:
+    if not item:
         print('inif')
         return False
     r = randint(28, 32)
     t = uniform(4.8, 7)
     clicktime = t/r
     random_wait(clicktime - .04, clicktime + .04)
-    center = pag.center(item)
-    random_coordinate(center, item)
+    myChoice = choice(item)
+    center = pag.center(myChoice)
+    random_coordinate(center, myChoice)
     pag.click()
     return True
 
@@ -95,7 +104,7 @@ if __name__ == '__main__':
                 
                 inventory = []
                 for image in drops:
-                    matches = pag.locateAllOnScreen(image, confidence=0.95)
+                    matches = pag.locateAllOnScreen(image, confidence=0.95, grayscale=True)
                     for match in matches:
                         inventory.append(match)
                 
@@ -109,9 +118,9 @@ if __name__ == '__main__':
                     dropItem(drop)
                 try:
                     print(conf)
-                    fishing = pag.locateOnScreen('images\\startFishing.png', confidence=conf)
+                    fishing = pag.locateAllOnScreen('images\\startFishing.png', confidence=conf, grayscale=True)
 
-                    if (startFishing(fishing)):
+                    if (startFishing(list(fishing))):
                         conf = 0.75
                     else:
                         conf = conf - .1
