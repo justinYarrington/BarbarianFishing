@@ -84,12 +84,13 @@ def random_coordinate(center, item):
         return pag.moveTo(x, y, time)
 
 def random_wait(min=0.25, max=0.50):
-        """Waits a random number of seconds between two numbers (0.25 and 0.50 default) to mimic human reaction time"""
-        return time.sleep(uniform(min, max))
+    """Waits a random number of seconds between two numbers (0.25 and 0.50 default) to mimic human reaction time"""
+    return time.sleep(uniform(min, max))
 
 def get_new_time_to_perform_action():
-  delay_minutes = (30 + random() * 30) # 30-60 minutes
-  return time.time() + delay_minutes * 60
+    """Used to figure out when we want to perform a random action during our while loop, such as checking fishing XP"""
+    delay_minutes = (30 + random() * 30) # 30-60 minutes
+    return time.time() + delay_minutes * 60
 
 # 2333, 1097 : 2512, 1352
 if __name__ == '__main__':
