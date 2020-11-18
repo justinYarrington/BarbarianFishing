@@ -7,13 +7,29 @@ import pyautogui as pag
 from itertools import chain
 import os
 
-def checkFishingLevel(path):
+def checkFishingLevel(item):
     """TODO: Mimic behavior of checking progress of fishing level"""
+    if not item:
+        print('inif')
+        return False
+    center = pag.center(item)
+    random_coordinate(center, item)
+    random_wait(2, 4)
     return
 
-def openInventory(path):
+def openInventory(item):
     """TODO: Should open the inventory if not already opened, i.e. after checking xp/level progress"""
-    return
+    if not item:
+        print('inif')
+        return False
+    r = randint(28, 32)
+    t = uniform(4.8, 7)
+    clicktime = t/r
+    random_wait(clicktime - .04, clicktime + .04)
+    center = pag.center(item)
+    random_coordinate(center, item)
+    pag.click()
+    return True
 
 def createDropList(path):
     """Using path, will return an array of all items that a player wishes to drop from their inventory"""
@@ -28,7 +44,6 @@ def dropItem(item):
     r = randint(28, 32)
     t = uniform(4.8, 7)
     clicktime = t/r
-    
     pag.keyDown('shift')
     random_wait(clicktime - .04, clicktime + .04)
     center = pag.center(item)
@@ -93,6 +108,11 @@ if __name__ == '__main__':
     try:
         while True:
             
+            """Check if in inventory or not, if not open it"""
+            if (pag.locateOnScreen('images\\inventoryClosed.png', confidence=0.95)):
+                inventoryImage = pag.locateOnScreen('images\\inventoryClosed.png', confidence=0.95)
+                openInventory(inventoryImage)
+
             if (pag.locateOnScreen('images\\isFishing.png', confidence=0.95)):
                 pass
             else:
