@@ -53,8 +53,9 @@ def clickIcon(item):
     return True
 
 def startFishing(item):
+    print(list(item))
     """Starts fishing given an image of the fishing location"""
-    if item is None:
+    if not item:
         print('inif')
         return False
     r = randint(28, 32)
@@ -99,11 +100,11 @@ if __name__ == '__main__':
     drops = createDropList('DropItems')
     try:
         while True:
-
+            
             """Randomly decide to check our fishing experience"""
             if (time.time() >= next_time_to_run):
-                clickIcon(pag.locateOnScreen('\\images\\clickSkills.png', confidence=0.95))
-                checkFishingLevel(pag.locateOnScreen('\\images\\fishingLevel.png', confidence=0.95))
+                clickIcon(pag.locateOnScreen('images\\clickSkills.png', confidence=0.95))
+                checkFishingLevel(pag.locateOnScreen('images\\fishingLevel.png', confidence=0.95))
                 next_time_to_run = get_new_time_to_perform_action()
 
             """Check if in inventory or not, if not open it"""
@@ -115,29 +116,26 @@ if __name__ == '__main__':
                 pass
             else:
                 print('NOT FISHING')
-                if (pag.locateOnScreen('images\\specialReady.png', confidence=0.95)):
-                    special = pag.locateOnScreen('images\\specialReady.png', confidence=0.95)
-                    clickIcon(special)
-                #we stopped fishing, drop inventory and restart fishing
                 
+                #we stopped fishing, drop inventory and restart fishing
                 inventory = []
                 for image in drops:
-                    matches = pag.locateAllOnScreen(image, confidence=0.95, grayscale=True)
+                    matches = pag.locateAllOnScreen(image, confidence=0.85, grayscale=True)
                     for match in matches:
                         inventory.append(match)
                 
-                # should sort on closest to current cursor, this can be much better 
-                # since image size is factored here
-                #toDropSorted = sorted(toDrop, key=lambda a: (pag.center(a).x,pag.center(a).y))
                 inventorySorted = sorted(inventory, key=lambda a: (a.top, a.left))
-                print(inventorySorted)
                 random_wait()
                 for drop in inventorySorted:
                     dropItem(drop)
+                
+                if (pag.locateOnScreen('images\\specialReady.png', confidence=0.95)):
+                    special = pag.locateOnScreen('images\\specialReady.png', confidence=0.95)
+                    clickIcon(special)
+
                 try:
                     print(conf)
                     fishing = pag.locateAllOnScreen('images\\startFishing.png', confidence=conf, grayscale=True)
-
                     if (startFishing(list(fishing))):
                         conf = 0.75
                     else:
@@ -147,6 +145,7 @@ if __name__ == '__main__':
                 except TypeError:
                     conf = conf -.1
                     pass
+                print("Time until next random: " + str(next_time_to_run))
     except KeyboardInterrupt:
         sys.exit()
     
