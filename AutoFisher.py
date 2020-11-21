@@ -8,7 +8,7 @@ from itertools import chain
 import os
 
 def checkFishingLevel(item):
-    """TODO: Mimic behavior of checking progress of fishing level"""
+    """Mimic behavior of checking progress of fishing level"""
     if not item:
         print('inif')
         return False
