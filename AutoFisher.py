@@ -135,6 +135,9 @@ if __name__ == '__main__':
 
                 try:
                     print(conf)
+                    # TODO: This one is big. But we should use pygetwindow to get a hold of the RuneLite window, then get the center of that window
+                    # and using the center of the window, we can click the startFishing.png that is closest to the center of the window since our character
+                    # is also centered to the window. DUH. 
                     fishing = pag.locateAllOnScreen('images\\startFishing.png', confidence=conf, grayscale=True)
                     if (startFishing(list(fishing))):
                         conf = 0.75
