@@ -129,6 +129,13 @@ if __name__ == '__main__':
                 for drop in inventorySorted:
                     dropItem(drop)
                 
+                # After dropping the inventory, lets close our inventory so we have a wider
+                # field of vision for clicking our fishing icon.
+
+                if (pag.locateOnScreen('images\\inventoryOpen.png', confidence=0.95)):
+                    inventoryOpenImage = pag.locateOnScreen('images\\inventoryOpen.png', confidence=0.95)
+                    clickIcon(inventoryOpenImage)
+
                 if (pag.locateOnScreen('images\\specialReady.png', confidence=0.95)):
                     special = pag.locateOnScreen('images\\specialReady.png', confidence=0.95)
                     clickIcon(special)
